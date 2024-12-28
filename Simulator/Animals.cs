@@ -1,9 +1,34 @@
-﻿using System.Xml.Linq;
+using System.Xml.Linq;
 namespace Simulator
 {
     public class Animals
     {
-        public required string Description { get; init; }
+        private string _description = "Unknown";
+        public string Description
+        {
+            get => _description;
+            init
+            {
+                string trdescription = value.Trim();
+                if (trdescription.Length < 3)
+                {
+                    trdescription = trdescription.PadRight(3, '#');
+                }
+                if (trdescription.Length > 15)
+                {
+                    trdescription = trdescription.Substring(0, 15).TrimEnd();
+                    if (trdescription.Length < 3)
+                    {
+                        trdescription = trdescription.PadRight(3, '#');
+                    }
+                }
+                if (char.IsLower(trdescription[0]))
+                {
+                    trdescription = char.ToUpper(trdescription[0]) + trdescription.Substring(1);
+                }
+                _description = trdescription;
+            }
+        }
         public uint Size { get; set; } = 3;
         public void Info()
         {
@@ -12,9 +37,3 @@ namespace Simulator
     }
 }
 
-/*
- * Dodaj do niej właściwość do odczytu Info
- * zwracającą opis i liczebność w formie: Dogs < 3 >.
-
-Zrób commit Stwory.
-*/
