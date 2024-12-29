@@ -8,7 +8,7 @@ public class Elf : Creature
     public Elf()
     {
     }
-    public Elf(string name = "Unknown", int level = 1, int agility = 1) : base(name, level)
+    public Elf(string name = "Unknown", int level = 1, int agility = 1) : base(name,level)
     {
         Name = name;
         Level = level;

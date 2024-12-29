@@ -5,11 +5,11 @@ public class Orc : Creature
     private int _huntCounter = 0;
     private int _rage;
 
-    public Orc(string name = "Unknown", int level = 1, int rage = 1) : base(name, level)
+    public Orc(string name = "Unknown", int level = 1, int rage = 1) : base(name,level)
     {
         Name = name;
         Level = level;
-        Rage = rage;
+        Rage = rage; 
     }
 
     public int Rage
