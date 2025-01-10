@@ -1,33 +1,35 @@
-﻿namespace Simulator
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Simulator;
+
+public static class DirectionParser
 {
-    public static class DirectionParser
+    public static Direction[] Parse(string directionInputString)
     {
-        public static Direction[] Parse(string parsedata)
+        List<Direction> result = new List<Direction>();
+
+        foreach (char letter in directionInputString.ToUpper()) //powiekszamy wszystkie litery żeby zmneijszyć ilość case'ow
         {
-            var directions = new List<Direction>();
-
-            foreach (char ch in parsedata.ToUpper())
+            switch (letter)
             {
-                switch (ch)
-                {
-                    case 'U':
-                        directions.Add(Direction.Up);
-                        break;
-                    case 'R':
-                        directions.Add(Direction.Right);
-                        break;
-                    case 'D':
-                        directions.Add(Direction.Down);
-                        break;
-                    case 'L':
-                        directions.Add(Direction.Left);
-                        break;
-                    default:
-                        break;
-                }
+                case 'U':
+                    result.Add(Direction.Up);
+                    break;
+                case 'R':
+                    result.Add(Direction.Right);
+                    break;
+                case 'D':
+                    result.Add(Direction.Down);
+                    break;
+                case 'L':
+                    result.Add(Direction.Left);
+                    break;
             }
-
-            return directions.ToArray();
         }
+        return result.ToArray();
     }
 }

@@ -1,34 +1,55 @@
-﻿namespace Simulator;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace Simulator;
 
 public static class Validator
 {
-    public static int Limiter(int value, int min, int max)
+    public static int Limiter(int value, int min, int max) 
     {
-        return Math.Max(min, Math.Min(max, value));
+        if (value <= min)
+        {
+            value = min;
+        }
+        else if (value >= max) 
+        {
+            value = max;
+        }
+        return value;
     }
 
     public static string Shortener(string value, int min, int max, char placeholder)
     {
-        value = value.Trim();
-        if (value.Length < min)
-        { 
-            value = value.PadRight(min, placeholder);
-        }
-        else if (value.Length > max)
-        { 
-            value = value.Substring(0, max).TrimEnd();
-
-            if (value.Length < min)
-            {
-                value = value.PadRight(min, placeholder);
-            }
-        }
-
-        if (value.Length > 0 && char.IsLower(value[0]))
+        string validatedName = value.Trim(); //Ucina białe znaki na początku i na końcu
+        if (validatedName == "" || validatedName == null) //Wyłapanie sytuacji w której z nazwy nic nie zostało po Trim()
         {
-            value = char.ToUpper(value[0]) + value.Substring(1);
+            return "###"; // zmiana z "Unknown"
         }
-
-        return value;
+        else
+        {
+            if (validatedName.Length < min)
+            {
+                validatedName = validatedName.PadRight(min, placeholder); //Uzyskanie nazwy na minimalną ilość znaków
+            }
+            else if (validatedName.Length > max)
+            {
+                validatedName = validatedName.Substring(0, max).TrimEnd(); //ucięcie stringa do maxymalną ilość znaków + ucięcie białych znaków z końca
+                if (validatedName.Length < min)
+                {
+                    validatedName = validatedName.PadRight(min, placeholder); //Uzyskanie nazwy na minimalną ilość znaków
+                }
+            }
+            if (char.IsLower(validatedName[0]))
+            {
+                validatedName = char.ToUpper(validatedName[0]) + validatedName.Substring(1); //Ustawienie pierwszej litery na wielka
+            }
+            return validatedName;
+        }
     }
 }
+
+
