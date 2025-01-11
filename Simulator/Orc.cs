@@ -1,73 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Simulator;
+﻿namespace Simulator;
 
 public class Orc : Creature
 {
-    //Pola prywatne
+    private int _huntCounter = 0;
     private int _rage;
-    private int _huntCounter = 0; // licznik polowan: początkowo = 0
-    private int _rageByHuntModifier = 2; // modyfikator: co ile polowan rośnie rage
 
-    //Właściwości + gettery/settery
-    public override int Power
+    public Orc(string name = "Unknown", int level = 1, int rage = 1) : base(name,level)
     {
-        get { return 7 * Level + 3 * Rage; }
+        Name = name;
+        Level = level;
+        Rage = rage; 
     }
 
     public int Rage
     {
-        get
-        {
-            return _rage;
-        }
-        init
-        {
-            _rage = Validator.Limiter(value, 0, 10);
-        }
+        get => _rage;
+        init => _rage = Validator.Limiter(value, 0, 10);
     }
 
-    public override string Info
+    public override int Power => Level * 7 + Rage * 3;
+
+    public override string Info => $"{Name} [{Level}][{Rage}]";
+
+    public override void SayHi()
     {
-        get
-        {
-            return $"[{Rage}]";
-        }
+        Console.WriteLine($"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}.");
     }
 
     public void Hunt()
     {
-        _huntCounter++; //licznik polowan +1
-        if (_huntCounter % _rageByHuntModifier == 0 && Rage < 10) //jeżeli ilość polowan podzielna przez modyfikator i rage < max
+        Console.WriteLine($"{Name} is hunting.");
+        _huntCounter++;
+        if (_huntCounter % 2 == 0)
         {
             _rage++;
-            _huntCounter = 0; //zerowanie licznika polowan
         }
-        else if ((_huntCounter % _rageByHuntModifier == 0 && Rage >= 10) || Rage >= 10) //jeżeli ilość polowan podzielna przez modyfikator ale rage >= max
-        {
-            _huntCounter = 0; //zerowanie licznika polowan
-        }
-    }
-
-    //Konstruktor bezparametrowy
-    public Orc() : base("Unknown Orc", 1)
-    {
-        //Brak działań
-    }
-
-    //konstruktor z parametrami
-    public Orc(string name, int level = 1, int rage = 0) : base(name, level)
-    {
-        Rage = rage;
-    }
-
-
-    public override string Greeting()
-    {
-        return $"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}.";
     }
 }

@@ -8,7 +8,6 @@ namespace Simulator.Maps;
 
 public class SmallTorusMap : Map
 {
-    // Właściwości
     public int Size { get; }
 
     public SmallTorusMap(int size)

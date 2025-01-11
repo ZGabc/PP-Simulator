@@ -1,25 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Simulator;
+﻿namespace Simulator;
 
 public class Birds : Animals
 {
-    //Pola prywatne
-    private bool _canFly = true;
-
-    //Właściwości
-    public bool CanFly
-    {
-        get { return _canFly; }
-        init { _canFly = value; }
-    }
+    public bool CanFly { get; init; } = true;
 
     public override string Info
     {
-        get { return CanFly == true ? "(fly+) " : "(fly-) "; }
+        get
+        {
+            string flyStatus = CanFly ? "fly+" : "fly-";
+            return $"{Description} ({flyStatus}) <{Size}>";
+        }
     }
 }

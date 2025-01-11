@@ -1,27 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Simulator;
+﻿namespace Simulator;
 
 public abstract class Creature
 {
-    //Pola Prywatne
-    private string _name = "Unknown"; //konwencja nazywania pól prywatnych _camelCase
-    private int _level;
+    private string _name = "Unknown";
 
-    //Właściwości + gettery/settery
-    public abstract int Power {  get; }
-    public abstract string Info { get; }
+    private int _level = 1;
 
     public string Name
     {
-        get
-        {
-            return _name;
-        }
+        get=>_name;
         init
         {
             _name = Validator.Shortener(value, 3, 25, '#');
@@ -29,65 +16,55 @@ public abstract class Creature
     }
     public int Level
     {
-        get
-        {
-            return _level;
-        }
+        get=>_level ;
         init
         {
             _level = Validator.Limiter(value, 1, 10);
         }
     }
-
-    //Konstruktor parametryczny
-    public Creature(string name, int level = 1)
+    public Creature()
+    {
+    }
+    public Creature(string name, int level=1)
     {
         Name = name;
         Level = level;
     }
-
-    //Konstruktor bez parametrów
-    public Creature()
+    public abstract string Info { get; }
+    public abstract int Power { get; }
+    public abstract void SayHi();
+    public override string ToString()
     {
-        //Nic nie wykonuje
+        return $"{GetType().Name.ToUpper()}: {Info}";
     }
 
-    public abstract string Greeting(); //Kod wykomentowany z powodu pojawienia sie metody abstrakcyjnej - for reference only
-    //{
-    //    return $"Hi, I'm {Name}, my level is {Level}.";
-    //}
 
     public void Upgrade()
     {
-        if (_level < 10) //Sprawdzenie, że nie ma levelu 10 przed podniesieniem o 1
+        if (_level < 10)
         {
             _level++;
         }
     }
 
-    public string Go(Direction direction) //Metoda GO na pojedynczy ruch stwora
+    public void Go(Direction direction)
     {
-        return $"{direction.ToString().ToLower()}"; //konwersja na string i ma małe litery
+        string lowerdirection = direction.ToString().ToLower();
+        Console.WriteLine($"{Name} goes {lowerdirection}.");
     }
 
-    public string[] Go(Direction[] directions) //Metoda GO na tablicę ruchów 
+    public void Go(Direction[] directions)
     {
-        string[] goTable = new string[directions.Length];
-        for (int i = 0; i < directions.Length; i++)
+        foreach (Direction direction in directions)
         {
-            goTable[i] = Go(directions[i]);
+            Go(direction);
         }
-        return goTable;
     }
 
-    public string[] Go(string directionInputString) //Metoda GO parsująca string na tabelicę ruchów
+    public void Go(string directions)
     {
-        Direction[] directions = DirectionParser.Parse(directionInputString);
-        return Go(directions); //wejsciem jest tablica kierunków
+        var directionArray = DirectionParser.Parse(directions);
+        Go(directionArray);
     }
 
-    public override string ToString()
-    {
-        return $"{GetType().Name.ToUpper()}: {Name} [{Level}]{Info}";
-    }
 }
