@@ -1,39 +1,78 @@
-﻿namespace Simulator;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Simulator;
 
 public class Orc : Creature
 {
-    private int _huntCounter = 0;
+    //Pola prywatne
     private int _rage;
+    private int _huntCounter = 0; // licznik polowan: początkowo = 0
+    private int _rageByHuntModifier = 2; // modyfikator: co ile polowan rośnie rage
 
-    public Orc(string name = "Unknown", int level = 1, int rage = 1) : base(name,level)
+    /// <summary>
+    /// Orc symbol to be displayed in SimConsole.
+    /// </summary>
+    public override char MapSymbol => 'O'; 
+
+    //Właściwości + gettery/settery
+    public override int Power
     {
-        Name = name;
-        Level = level;
-        Rage = rage; 
+        get { return 7 * Level + 3 * Rage; }
     }
 
     public int Rage
     {
-        get => _rage;
-        init => _rage = Validator.Limiter(value, 0, 10);
+        get
+        {
+            return _rage;
+        }
+        init
+        {
+            _rage = Validator.Limiter(value, 0, 10);
+        }
     }
 
-    public override int Power => Level * 7 + Rage * 3;
-
-    public override string Info => $"{Name} [{Level}][{Rage}]";
-
-    public override void SayHi()
+    public override string Info
     {
-        Console.WriteLine($"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}.");
+        get
+        {
+            return $"[{Rage}]";
+        }
     }
 
     public void Hunt()
     {
-        Console.WriteLine($"{Name} is hunting.");
-        _huntCounter++;
-        if (_huntCounter % 2 == 0)
+        _huntCounter++; //licznik polowan +1
+        if (_huntCounter % _rageByHuntModifier == 0 && Rage < 10) //jeżeli ilość polowan podzielna przez modyfikator i rage < max
         {
             _rage++;
+            _huntCounter = 0; //zerowanie licznika polowan
         }
+        else if ((_huntCounter % _rageByHuntModifier == 0 && Rage >= 10) || Rage >= 10) //jeżeli ilość polowan podzielna przez modyfikator ale rage >= max
+        {
+            _huntCounter = 0; //zerowanie licznika polowan
+        }
+    }
+
+    //Konstruktor bezparametrowy
+    public Orc() : base("Unknown Orc", 1)
+    {
+        //Brak działań
+    }
+
+    //konstruktor z parametrami
+    public Orc(string name, int level = 1, int rage = 0) : base(name, level)
+    {
+        Rage = rage;
+    }
+
+
+    public override string Greeting()
+    {
+        return $"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}.";
     }
 }
